@@ -1,0 +1,33 @@
+stages:
+  - build
+  - deploy
+
+include:
+  - project: 'rickselby-linode-setup/gitlab-ci-templates'
+    file: '/deploy-template.yml'
+
+variables:
+  CONTAINER_FRONTEND_PROD: $CI_REGISTRY_IMAGE/frontend:$CI_COMMIT_SHORT_SHA
+  COMPOSE_FILE_PATH: docker-compose.production.yml
+
+build-prod:
+  image: docker:latest
+  services:
+    - docker:dind
+  stage: build
+  before_script:
+    - echo "$CI_REGISTRY_PASSWORD" | docker login -u "$CI_REGISTRY_USER" "$CI_REGISTRY" --password-stdin
+  script:
+    - DOCKER_BUILDKIT=1 docker build --progress=plain --pull --target web-production -t $CONTAINER_FRONTEND_PROD -f Dockerfile .
+    - docker push $CONTAINER_FRONTEND_PROD
+  only:
+    - master
+
+deploy:
+  extends: .docker-template
+  stage: deploy
+  script:
+    - eval $COMPOSE_COMMAND pull
+    - eval $COMPOSE_COMMAND up -d --remove-orphans
+  only:
+    - master

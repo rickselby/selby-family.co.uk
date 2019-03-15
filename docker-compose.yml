@@ -1,0 +1,12 @@
+version: '2.4'
+services:
+  web:
+    container_name: selbyfamily-web
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: nginx
+    volumes:
+      - ./src:/code/public
+    ports:
+      - "80:80"
