@@ -6,6 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
       target: nginx
+    image: selbyfamily-web
     volumes:
       - ./src:/code/public
     ports:
