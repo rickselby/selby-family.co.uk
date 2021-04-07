@@ -17,6 +17,7 @@ jobs:
       - uses: rickselby-web-server/actions/docker-compose-deploy@main
         with:
           COMPOSE_FILE_PATH: docker-compose.production.yml
+          CONNECT_CONTAINERS: nginx-proxy
           STACK_NAME: selbyfamily
         env:
           DOCKER_HOST: ${{ secrets.REMOTE_DOCKER_HOST }}
