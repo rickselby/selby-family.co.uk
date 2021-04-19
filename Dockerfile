@@ -1,5 +1,5 @@
 ###############################################################################
-FROM nginx:1.19.9-alpine AS nginx
+FROM nginx:1.19.10-alpine AS nginx
 
 WORKDIR /code/public
 
